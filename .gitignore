@@ -14,3 +14,11 @@ Thumbs.db
 # Temporary files
 *.tmp
 *~
+
+# Environment variables
+.env
+api/.env
+
+# Dependencies
+node_modules/
+api/node_modules/
