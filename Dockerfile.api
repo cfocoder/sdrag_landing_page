@@ -13,7 +13,7 @@ RUN npm install --production
 COPY api/ ./
 
 # Expose port
-EXPOSE 3001
+EXPOSE 3002
 
 # Start server
 CMD ["node", "server.js"]

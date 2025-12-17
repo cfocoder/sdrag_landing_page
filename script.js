@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             try {
                 // Send to our API endpoint
-                const response = await fetch('https://api.sdrag.com/api/contact', {
+                const response = await fetch('https://resend.sdrag.com/api/contact', {
                     method: 'POST',
                     body: formData
                 });

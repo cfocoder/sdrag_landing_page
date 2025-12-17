@@ -10,7 +10,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Middleware
 app.use(cors({
-    origin: ['https://sdrag.com', 'https://www.sdrag.com', 'http://localhost:3000']
+    origin: ['https://sdrag.com', 'https://www.sdrag.com', 'http://localhost:3000', 'http://localhost:5500']
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -173,7 +173,7 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
     console.log(`🚀 SDRAG Contact API running on port ${PORT}`);
 });
