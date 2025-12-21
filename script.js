@@ -29,23 +29,38 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get form data
             const formData = new FormData(contactForm);
             
-            // Convert FormData to JSON object
-            const formObject = {};
-            formData.forEach((value, key) => {
-                formObject[key] = value;
-            });
+            // Determine which endpoint to use
+            const isProduction = window.location.hostname === 'sdrag.com' || window.location.hostname === 'www.sdrag.com';
             
             try {
-                // Send to our API endpoint
-                const response = await fetch('https://resend.sdrag.com/api/contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formObject)
+                let response, data;
+                
+                // Convert FormData to JSON object
+                const formObject = {};
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
                 });
                 
-                const data = await response.json();
+                if (isProduction) {
+                    // Production: Use Resend API
+                    response = await fetch('https://resend.sdrag.com/api/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formObject)
+                    });
+                    
+                    data = await response.json();
+                } else {
+                    // Development: Use local PHP
+                    response = await fetch('send-email.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    data = await response.json();
+                }
                 
                 if (response.ok && data.success) {
                     // Success
