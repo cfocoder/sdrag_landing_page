@@ -29,27 +29,39 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get form data
             const formData = new FormData(contactForm);
             
+            // Convert FormData to JSON object
+            const formObject = {};
+            formData.forEach((value, key) => {
+                formObject[key] = value;
+            });
+            
             try {
                 // Send to our API endpoint
                 const response = await fetch('https://resend.sdrag.com/api/contact', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formObject)
                 });
                 
                 const data = await response.json();
                 
-                if (response.ok) {
+                if (response.ok && data.success) {
                     // Success
                     formMessage.textContent = 'Message sent successfully! We\'ll get back to you soon.';
                     formMessage.className = 'p-4 rounded-lg mb-4 bg-green-500/20 border border-green-500 text-green-200';
+                    formMessage.classList.remove('hidden');
                     contactForm.reset();
                 } else {
-                    throw new Error('Failed to send message');
+                    throw new Error(data.message || 'Failed to send message');
                 }
             } catch (error) {
                 // Error
+                console.error('Form submission error:', error);
                 formMessage.textContent = 'Failed to send message. Please try again or email us directly at hector@sdrag.com';
                 formMessage.className = 'p-4 rounded-lg mb-4 bg-red-500/20 border border-red-500 text-red-200';
+                formMessage.classList.remove('hidden');
             } finally {
                 // Re-enable button
                 submitBtn.disabled = false;
