@@ -41,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     formObject[key] = value;
                 });
                 
+                console.log('Form data being sent:', formObject);
+                
                 if (isProduction) {
                     // Production: Use Resend API
                     response = await fetch('https://resend.sdrag.com/api/contact', {
@@ -51,7 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         body: JSON.stringify(formObject)
                     });
                     
+                    console.log('Response status:', response.status);
                     data = await response.json();
+                    console.log('Response data:', data);
                 } else {
                     // Development: Use local PHP
                     response = await fetch('send-email.php', {
